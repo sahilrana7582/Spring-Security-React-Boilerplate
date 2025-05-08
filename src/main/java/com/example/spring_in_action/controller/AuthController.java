@@ -5,6 +5,7 @@ import com.example.spring_in_action.DTO.LoginRequest;
 import com.example.spring_in_action.DTO.RegisterRequest;
 import com.example.spring_in_action.DTO.ResponseDTO;
 
+import com.example.spring_in_action.security.jwt.JwtUtils;
 import com.example.spring_in_action.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
 
     private final AuthService authService;
+    private final JwtUtils jwtUtils;
 
     @PostMapping("/register")
     public ResponseEntity<String> registerUser(@Valid @RequestBody RegisterRequest registerRequest) {
@@ -27,6 +29,10 @@ public class AuthController {
     public ResponseEntity<ResponseDTO> authenticateUser( @RequestBody LoginRequest loginRequest) {
 
         System.out.println("COming Here");
+
+        String token = jwtUtils.generateJwtToken(loginRequest.getUsername());
+        System.out.println("___________________________>>>>>>>>>>>>>>  "+token);
+
         return authService.authenticateUser(loginRequest);
     }
 }
